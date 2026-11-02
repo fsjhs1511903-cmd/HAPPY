@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時間卡牌大冒險：專案成果與一頁式介紹</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                        cute: ['Fredoka', 'Noto Sans TC', 'sans-serif']
+                    },
+                    colors: {
+                        pastel: {
+                            blue: '#8ECAE6',
+                            sky: '#219EBC',
+                            navy: '#023047',
+                            amber: '#FFB703',
+                            orange: '#FB8500',
+                            bg: '#FAF8F5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAF8F5;
+            color: #334155;
+            background-image: radial-gradient(rgba(148, 163, 184, 0.18) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-purple-200 selection:text-purple-900">
+
+    <!-- Sticky Navigation Header -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <span class="text-2xl">⏳</span>
+                <span class="font-cute font-bold text-lg md:text-xl text-slate-800">時間卡牌大冒險</span>
+            </div>
+            <div class="hidden md:flex items-center gap-6 text-sm font-bold text-slate-600">
+                <a href="#about" class="hover:text-purple-600 transition">開發緣起</a>
+                <a href="#journey" class="hover:text-purple-600 transition">歷程進化</a>
+                <a href="#features" class="hover:text-purple-600 transition">遊戲特色</a>
+                <a href="#theme-song" class="hover:text-purple-600 transition">主題曲</a>
+            </div>
+            <a href="index.html" class="bg-purple-600 hover:bg-purple-700 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-xl transition shadow-sm flex items-center gap-1.5">
+                <i class="fa-solid fa-gamepad"></i> 進入遊戲平台
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <header class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 text-center">
+        <div class="inline-flex items-center gap-2 bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full mb-6">
+            ✨ 專為國中生量身打造的時間管理學習平台
+        </div>
+        <h1 class="text-3xl md:text-5xl font-black text-slate-800 tracking-tight mb-6 leading-tight">
+            從「屢屢放棄」到「掌控主場」<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-500">
+                國一生的抓緊時間遊戲化大冒險
+            </span>
+        </h1>
+        <p class="max-w-2xl mx-auto text-slate-600 text-sm md:text-base leading-relaxed mb-8">
+            打破枯燥教條，將真實國中生活情境轉化為互動卡牌抽牌體驗。透過 32+ 題隨機不重複的生活化問答，訓練果斷抓緊時間的反射神經！
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="index.html" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-2xl text-sm transition shadow-md flex items-center gap-2">
+                <i class="fa-solid fa-play"></i> 立即開始體驗抽牌
+            </a>
+            <a href="#journey" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold px-6 py-3 rounded-2xl text-sm transition flex items-center gap-2">
+                <i class="fa-solid fa-book-open"></i> 探索開發歷程
+            </a>
+        </div>
+    </header>
+
+    <!-- SECTION 1: 開發緣起與痛點 (About) -->
+    <section id="about" class="py-16 bg-white border-y border-slate-200/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-3">為什麼需要這個平台？</h2>
+                <p class="text-slate-500 text-xs md:text-sm">面對國一全新的學習節奏與生活誘惑，我們經常陷入拖延的怪圈。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-3">
+                    <div class="w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl font-bold">❌</div>
+                    <h3 class="font-bold text-base text-slate-800">嘗試總是半途而廢</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        「想抓緊時間但總是做不好」，嚴肅的讀書計畫表容易帶來巨大的心理壓力，導致頻繁放棄。
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-3">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold">📱</div>
+                    <h3 class="font-bold text-base text-slate-800">日常時間黑洞誘惑</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        《傳說對決》戰友揪團、IG / TikTok 短影音演算法、考前梗圖群組，讓專注力不斷被打碎。
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-3">
+                    <div class="w-10 h-10 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl font-bold">🧹</div>
+                    <h3 class="font-bold text-base text-slate-800">假性勤勞拖延怪</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        要讀書時突然想收拾房間、整理筆記本，用「假裝勤勞」逃避真正重要且緊急的學習任務。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: 專案演進歷程 (Journey Roadmap) -->
+    <section id="journey" class="py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-3">從概念到平台的演進歷程</h2>
+                <p class="text-slate-500 text-xs md:text-sm">傾聽使用者真實反饋，進行四階段的深度優化與迭代。</p>
+            </div>
+
+            <div class="relative border-l-2 border-purple-200 ml-4 md:ml-32 space-y-12">
+                
+                <!-- Step 1 -->
+                <div class="relative pl-8">
+                    <div class="absolute -left-[17px] top-0 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs">1</div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-2">
+                        <span class="text-[11px] font-bold text-purple-600 bg-purple-50 px-2.5 py-0.5 rounded-full">階段一：雛型發想</span>
+                        <h3 class="text-base font-bold text-slate-800">多模組時間挑戰關卡</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            設計包含體感時間測量、番茄衝刺與時間風暴等關卡，建立基本積分與等級體系。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative pl-8">
+                    <div class="absolute -left-[17px] top-0 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs">2</div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-2">
+                        <span class="text-[11px] font-bold text-purple-600 bg-purple-50 px-2.5 py-0.5 rounded-full">階段二：主題與視覺翻新</span>
+                        <h3 class="text-base font-bold text-slate-800">柔和粉彩與國一卡牌抽牌機制</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            改為奶油黃與淡紫柔和配色，簡化複雜關卡，專注於「實體 3D 卡牌堆抽牌」模式，並加入國一日常故事情境。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative pl-8">
+                    <div class="absolute -left-[17px] top-0 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs">3</div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-2">
+                        <span class="text-[11px] font-bold text-purple-600 bg-purple-50 px-2.5 py-0.5 rounded-full">階段三：體驗極致化</span>
+                        <h3 class="text-base font-bold text-slate-800">智慧防重複洗牌與選項隨機化</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            拓展題庫至 32+ 題，引入 Fisher-Yates 洗牌演算法與瀏覽器記憶，確保練習題目不重複；選項順序動態打亂，訓練真實判斷力。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative pl-8">
+                    <div class="absolute -left-[17px] top-0 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs">4</div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-2">
+                        <span class="text-[11px] font-bold text-purple-600 bg-purple-50 px-2.5 py-0.5 rounded-full">階段四：介面極簡與跨界拓展</span>
+                        <h3 class="text-base font-bold text-slate-800">永久色彩選擇列與 Suno 專屬主題曲</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            簡化大樓選單，將配色點保留在頂部導覽列隨點即換；同步打造 AI 動漫風格主題曲《時間卡牌大冒險：掌控我的主場》。
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: 核心特色 (Features) -->
+    <section id="features" class="py-16 bg-white border-y border-slate-200/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-3">平台四大亮點</h2>
+                <p class="text-slate-500 text-xs md:text-sm">精心設計的每個細節，都是為了幫你輕鬆建立好習慣。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div class="text-3xl p-3 bg-white rounded-2xl shadow-sm">🎴</div>
+                    <div class="space-y-1">
+                        <h3 class="font-bold text-slate-800">3D 卡牌堆與抽牌體驗</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            模擬實體桌遊的抽牌觸感，親自點擊牌堆抽卡，搭配流暢的滑動與翻牌動畫，增添互動樂趣。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div class="text-3xl p-3 bg-white rounded-2xl shadow-sm">🎨</div>
+                    <div class="space-y-1">
+                        <h3 class="font-bold text-slate-800">一鍵切換柔和主題色</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            提供奶油黃、天空藍、薰衣草紫、薄荷綠、蜜桃粉與極簡黑等多種背景，保護視力並提升練習沉浸感。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div class="text-3xl p-3 bg-white rounded-2xl shadow-sm">🔄</div>
+                    <div class="space-y-1">
+                        <h3 class="font-bold text-slate-800">防重複洗牌演算法</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            智慧儲存已答題目，每次挑戰自動抽換全新題目，確保每次遊玩都有新鮮感與防忘記的記憶訓練。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div class="text-3xl p-3 bg-white rounded-2xl shadow-sm">⚡</div>
+                    <div class="space-y-1">
+                        <h3 class="font-bold text-slate-800">雙模式與連擊獎勵機制</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            包含「5卡特訓」與「60秒極速快刷」模式，搭配 Combo 連擊音效與能量加成，提升學習誘因。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: 主題曲專區 (Theme Song) -->
+    <section id="theme-song" class="py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-br from-purple-600 via-indigo-600 to-sky-600 rounded-3xl p-8 md:p-12 text-white text-center space-y-6 shadow-lg">
+                <span class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur">
+                    🎵 SUNO AI 合作主題曲
+                </span>
+                <h2 class="text-2xl md:text-4xl font-black">《時間卡牌大冒險：掌控我的主場》</h2>
+                <p class="text-purple-100 text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
+                    風格定位：J-Pop, Upbeat Pop Rock, Bright Synth-Pop (135 BPM)<br>
+                    充滿活力的流行搖滾，陪你刷出亮眼的 Combo 連擊！
+                </p>
+
+                <!-- Interactive Web Music Player -->
+                <div class="bg-black/30 backdrop-blur rounded-2xl p-4 max-w-md mx-auto border border-white/20 flex flex-col items-center space-y-3">
+                    <div class="flex items-center justify-between w-full px-2 text-xs font-bold">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-music text-amber-300"></i> 主題曲試聽 (Synth Preview)</span>
+                        <span id="player-time" class="text-purple-200">00:00</span>
+                    </div>
+                    <div class="flex items-center gap-4 w-full">
+                        <button id="theme-play-btn" onclick="toggleThemeSong()" class="w-12 h-12 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold flex items-center justify-center text-lg transition shadow-md">
+                            <i class="fa-solid fa-play" id="play-icon"></i>
+                        </button>
+                        <div class="flex-1">
+                            <div class="w-full bg-white/20 rounded-full h-2 cursor-pointer relative overflow-hidden" onclick="seekSong(event)">
+                                <div id="song-progress" class="bg-amber-400 h-full w-0 transition-all duration-200"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-black/20 backdrop-blur rounded-2xl p-6 text-left max-w-lg mx-auto text-xs font-mono space-y-3 leading-relaxed border border-white/10">
+                    <p class="text-amber-300 font-bold">[Chorus]</p>
+                    <p>抓緊時間 抽取我的勝利卡牌！</p>
+                    <p>拒絕拖延 邁開腳步迎向未來！</p>
+                    <p>Pastel pop, Light the light, 掌控節奏超精彩！</p>
+                    <p>不再猶豫 不再等待 掌握時間我最帥！</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Web Audio Synth BGM generator for theme song preview
+        let isPlaying = false;
+        let audioCtx = null;
+        let timer = null;
+        let currentSeconds = 0;
+
+        function toggleThemeSong() {
+            const btnIcon = document.getElementById('play-icon');
+            if (!isPlaying) {
+                isPlaying = true;
+                btnIcon.className = 'fa-solid fa-pause';
+                startMusicLoop();
+            } else {
+                isPlaying = false;
+                btnIcon.className = 'fa-solid fa-play';
+                clearInterval(timer);
+            }
+        }
+
+        function startMusicLoop() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            // Play melodic rhythm notes
+            const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23];
+            let noteIdx = 0;
+
+            timer = setInterval(() => {
+                if (!isPlaying) return;
+                currentSeconds += 0.5;
+                const minutes = Math.floor(currentSeconds / 60).toString().padStart(2, '0');
+                const secs = Math.floor(currentSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('player-time').innerText = `${minutes}:${secs}`;
+                document.getElementById('song-progress').style.width = `${(currentSeconds % 30) / 30 * 100}%`;
+
+                // Play synth pulse note
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = notes[noteIdx % notes.length];
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                    noteIdx++;
+                } catch(e) {}
+            }, 300);
+        }
+
+        function seekSong(e) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            currentSeconds = Math.floor(pos * 30);
+            document.getElementById('song-progress').style.width = `${pos * 100}%`;
+        }
+    </script>
+
+    <!-- CTA & Footer -->
+    <footer class="bg-slate-900 text-white py-12 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+            <h3 class="text-xl font-bold">準備好掌控你的時間了嗎？</h3>
+            <div>
+                <a href="index.html" class="inline-flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white font-bold px-8 py-3 rounded-2xl text-sm transition shadow-md">
+                    <i class="fa-solid fa-hand-pointer"></i> 立即進入遊戲開始練習
+                </a>
+            </div>
+            <p class="text-slate-500 text-xs pt-6">
+                時間卡牌大冒險 • 專利與版權所有 © 2026
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
