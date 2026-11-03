@@ -1,37 +1,59 @@
-🚀 如何將網頁免費發布到 GitHub Pages
-跟著以下 4 個步驟，就能把您的《時間卡牌大冒險》網頁變成全世界都可以開啟的網站連結！
+⏳ 時間卡牌大冒險：國中生時間掌控術
+Time Card Adventure: Youth Time Mastery Platform
+> 🎯 **專為國中生量身打造的一頁式 Web 遊戲化學習平台！**
+> 擺脫枯燥嚴肅的教條，將真實生活情境融入 3D 卡牌抽牌機制，培養果斷掌控時間的直覺反射力！
 ---
-步驟 1：準備好您的網頁檔案
-請在電腦中開一個資料夾（例如叫 `time-card-adventure`），並將您的網頁檔案放進去：
-主要檔案請一定要命名為 `index.html`（這樣 GitHub Pages 才能自動將它識頁為首頁）。
-如果有 `project_landing.html` 等其他頁面，也可以放在同一個資料夾。
+🌟 專案緣由與動機 (Motivation)
+在邁入國中生活後，面對全新的學習節奏、頻繁的段考壓力，以及日常豐富的娛樂誘惑（手遊、短影音、IG 梗圖等），許多學生常陷入以下困境：
+嘗試總是半途而廢：過於嚴苛或複雜的讀書計畫表帶來巨大心理壓力，往往執行兩天就放棄。
+時間黑洞誘惑：無法果斷拒絕「再打一把手遊」或「再滑 15 秒短影音」的吸引力。
+假性勤勞拖延怪：要讀書時突然想收拾房間、大掃除，用假裝勤勞來逃避真正重要的學習任務。
+《時間卡牌大冒險》 的設計初衷，正是希望透過**「遊戲化抽牌」與「情境化問答」**，讓學生在輕鬆的互動中練習「延遲享樂」與「果斷決策」，學會如何抓緊時間、做自己時間的主人。
 ---
-步驟 2：註冊並登入 GitHub
-前往 GitHub 官網。
-如果還沒有帳號，點擊右上角的 Sign up 免費註冊；如果有了請點 Sign in 登入。
+🚀 核心特色 (Key Features)
+🎴 3D 擬真卡牌抽牌體驗
+採用擬真 3D 疊牌視覺與順暢的抽牌動畫，提供如同實體桌遊般的互動手感。
+🎨 一鍵切換柔和主題色彩
+內建奶油黃、天空藍、薰衣草紫、薄荷綠、蜜桃粉與極簡黑等多款柔和配色，隨點隨換，提供快適的瀏覽體驗。
+🔄 防重複洗牌演算法 (Fisher-Yates)
+收錄 32+ 題國一生活真實情境題庫，結合瀏覽器 LocalStorage 記憶與隨機洗牌機制，確保每次體驗都有新鮮感。
+🔀 選項順序動態打亂
+每次抽卡時動態打亂正確答案與選項的上下位置，訓練真實的邏輯判斷力而非機械記憶。
+⚡ 雙重遊戲模式
+5 卡特訓模式：適合日常隨手練習，精準診斷生活決策。
+60 秒極速快刷：高壓極速抽牌，訓練面對時間黑洞時的「直覺反射力」。
+🎵 專屬主題曲與聲音效果
+結合 Web Audio API 打造互動音效與旋律，並收錄專屬 J-Pop 風格主題曲《時間卡牌大冒險：掌控我的主場》。
 ---
-步驟 3：建立新的儲存庫 (Repository)
-登入後，點擊頁面右上角的 `+` 圖示，選擇 New repository（建立新儲存庫）。
-在 Repository name（儲存庫名稱）填入名稱，例如：`time-card-game`。
-確保勾選 Public（公開，免費版 GitHub Pages 需要選 Public）。
-（可選）勾選 Add a README file。
-點擊最下方的綠色按鈕 Create repository。
+🛣️ 開發演進歷程 (Development Journey)
+```
+[ Phase 1: 雛型發想 ] ➔ [ Phase 2: 視覺與卡牌化 ] ➔ [ Phase 3: 洗牌防重機制 ] ➔ [ Phase 4: 主題曲與介紹網頁 ]
+```
+Phase 1 雛型發想：規劃多模組時間關卡（體感測量、番茄衝刺等），建立基礎分數與能量值架構。
+Phase 2 視覺與卡牌化：導入柔和粉彩配色，簡化介面，聚焦於「3D 實體卡牌抽牌」體驗，並融入 32 題國一日常生活情境。
+Phase 3 體驗極致化：加入 Fisher-Yates 洗牌演算法防止題目重複，並實現選項隨機打亂與 Combo 連擊音效。
+Phase 4 跨界整合：將主題色切換融入頂部選單，使用 Suno AI 製作專屬動漫風主題曲，並打造專屬一頁式成果介紹頁面 (`project_landing.html`)。
 ---
-步驟 4：上傳檔案與開啟網頁發布 (GitHub Pages)
-📤 A. 上傳檔案
-進入剛建立好的 Repository 頁面後，點擊 Add file 按鈕 ➔ 選擇 Upload files。
-將您電腦裡的 `index.html`（與其他 `.html` 檔案）直接拖曳到畫面上上傳。
-在頁面下方點擊綠色的 Commit changes 按鈕儲存檔案。
-🌐 B. 開啟免費網頁服務 (GitHub Pages)
-在專案頁面上方選單，點擊 Settings（設定）。
-在左側欄位找到 Pages（位於 Code and automation 區塊下）。
-在 Build and deployment ➔ Branch 處：
-將 `None` 切換選擇為 `main` (或 `master`)。
-資料夾保持為 `/(root)`。
-點擊旁邊的 Save 儲存。
-稍等約 1~3 分鐘後重新整理頁面，您就會在頂部看到綠色勾勾提示：
-> **Your site is live at `https://你的帳號.github.io/time-card-game/`**
+🎮 遊戲機制說明 (Gameplay)
+抽牌 (Draw)：點擊中央 3D 牌堆抽出一張國一生活情境卡。
+抉擇 (Choice)：閱讀情境後，在隨機排列的選項中選擇「🎯 抓緊時間」或辨識「😈 掉入拖延」。
+獎勵 (Reward)：答對可獲得能量值與 Combo 連擊加成；答錯可即時觀看情境解析與改進建議。
+結算 (Result)：完成特訓後獲得稱號獎勵（如：時間新手小當家 ➔ 超時空時間戰神）。
 ---
-💡 小技巧：
-之後想要調整遊戲內容或題目，只需點擊檔案旁邊的 ✏️ 編輯筆圖示 或重新 Upload files 覆蓋，網站就會自動更新囉！
-
+📂 專案檔案結構 (Project Structure)
+```text
+.
+├── index.html            # 遊戲平台主程式 (Single-File HTML Application)
+├── project_landing.html  # 一頁式專案成果與特色介紹網站 (Landing Page)
+└── README.md             # 專案說明文件
+```
+---
+🛠️ 技術標籤 (Tech Stack)
+Frontend: HTML5, JavaScript (ES6+), Tailwind CSS
+Audio: Web Audio API / Tone Synthesizer
+Design Style: Pastel UI, Soft Theme Palette, Responsive Design
+---
+📄 授權條款 (License)
+本專案採用 MIT License 條款開放分享與學習使用。
+---
+時間卡牌大冒險 • 每天練習抓緊時間 🚀
