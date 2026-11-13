@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時間卡牌大冒險：國中生時間掌控術</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                        cute: ['Fredoka', 'Noto Sans TC', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Theme background color variants */
+        body.theme-cream { background-color: #FAF8F5; color: #334155; }
+        body.theme-sky { background-color: #F0F9FF; color: #0F172A; }
+        body.theme-lavender { background-color: #FAF5FF; color: #3B0764; }
+        body.theme-mint { background-color: #F0FDF4; color: #064E3B; }
+        body.theme-peach { background-color: #FFF7ED; color: #431407; }
+        body.theme-dark { background-color: #0F172A; color: #F8FAFC; }
+
+        body {
+            transition: background-color 0.4s ease, color 0.4s ease;
+            background-image: radial-gradient(rgba(148, 163, 184, 0.18) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body.theme-dark {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1.5px, transparent 1.5px);
+        }
+
+        /* Card 3D Deck Layers & Animation */
+        .perspective-1000 { perspective: 1000px; }
+
+        .deck-layer-1 { transform: translate(-4px, -4px); }
+        .deck-layer-2 { transform: translate(-8px, -8px); }
+        .deck-layer-3 { transform: translate(-12px, -12px); }
+
+        @keyframes drawCard {
+            0% { transform: translateY(-30px) scale(0.92) rotate(-3deg); opacity: 0; }
+            100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .animate-draw {
+            animation: drawCard 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .bounce-short { animation: bounce 0.6s ease infinite; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Active theme indicator dot styling */
+        .theme-dot-btn {
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .theme-dot-btn.active {
+            transform: scale(1.25);
+            box-shadow: 0 0 0 2.5px #A855F7;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 99px; }
+    </style>
+</head>
+<body class="theme-cream min-h-screen flex flex-col justify-between p-3 md:p-6">
+
+    <!-- Minimalist Header with Permanent Theme Color Dots -->
+    <header class="max-w-3xl mx-auto w-full bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-slate-200/80 dark:border-slate-800 rounded-2xl px-4 py-3 shadow-sm flex flex-wrap items-center justify-between gap-3 mb-4">
+        
+        <!-- Left Title Logo -->
+        <div class="flex items-center gap-2.5 cursor-pointer" onclick="app.showTab('dashboard')">
+            <span class="text-2xl">⏳</span>
+            <div>
+                <h1 class="font-cute font-bold text-base md:text-lg tracking-wide flex items-center gap-1.5 dark:text-white">
+                    時間卡牌大冒險
+                    <span class="text-[10px] bg-purple-100 text-purple-700 dark:bg-purple-900/60 dark:text-purple-300 font-sans font-medium px-2 py-0.5 rounded-full">國一專用版</span>
+                </h1>
+            </div>
+        </div>
+
+        <!-- Right Controls: Permanent Color Swatch Bar + Energy Counter + Sound Toggle -->
+        <div class="flex items-center gap-3">
+            
+            <!-- Visible Permanent Theme Selector Dots Bar -->
+            <div class="flex items-center gap-1.5 bg-slate-100/90 dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-200/60 dark:border-slate-700" title="點擊切換背景色彩">
+                <button id="dot-theme-cream" onclick="app.setTheme('theme-cream')" class="theme-dot-btn w-5 h-5 rounded-full bg-[#FAF8F5] border border-slate-300 hover:scale-110" title="奶油黃"></button>
+                <button id="dot-theme-sky" onclick="app.setTheme('theme-sky')" class="theme-dot-btn w-5 h-5 rounded-full bg-[#F0F9FF] border border-slate-300 hover:scale-110" title="天空藍"></button>
+                <button id="dot-theme-lavender" onclick="app.setTheme('theme-lavender')" class="theme-dot-btn w-5 h-5 rounded-full bg-[#FAF5FF] border border-slate-300 hover:scale-110" title="薰衣草"></button>
+                <button id="dot-theme-mint" onclick="app.setTheme('theme-mint')" class="theme-dot-btn w-5 h-5 rounded-full bg-[#F0FDF4] border border-slate-300 hover:scale-110" title="薄荷綠"></button>
+                <button id="dot-theme-peach" onclick="app.setTheme('theme-peach')" class="theme-dot-btn w-5 h-5 rounded-full bg-[#FFF7ED] border border-slate-300 hover:scale-110" title="蜜桃粉"></button>
+                <button id="dot-theme-dark" onclick="app.setTheme('theme-dark')" class="theme-dot-btn w-5 h-5 rounded-full bg-[#0F172A] border border-slate-500 hover:scale-110" title="極簡黑"></button>
+            </div>
+
+            <!-- Energy Counter -->
+            <div class="bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800 px-2.5 py-1 rounded-full flex items-center gap-1 text-xs">
+                <span class="text-amber-500">⚡</span>
+                <span id="header-energy" class="font-cute font-bold text-amber-700 dark:text-amber-400">0</span>
+            </div>
+
+            <!-- BGM Music Toggle Button -->
+            <button onclick="sound.toggleBGM()" id="bgm-btn" class="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-900/60 hover:bg-purple-200 text-purple-600 dark:text-purple-300 flex items-center justify-center text-xs transition" title="背景音樂開關">
+                <i class="fa-solid fa-music" id="bgm-icon"></i>
+            </button>
+
+            <!-- Sound FX Toggle Button -->
+            <button onclick="sound.toggleSound()" id="sound-btn" class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xs transition" title="音效開關">
+                <i class="fa-solid fa-volume-high" id="sound-icon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-3xl w-full mx-auto flex flex-col justify-center">
+
+        <!-- ================= VIEW 1: HOME (CLEAN 2 MODES) ================= -->
+        <section id="tab-dashboard" class="space-y-4 my-auto">
+            
+            <!-- Quick Progress Bar Pill -->
+            <div class="bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 rounded-2xl px-4 py-2.5 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-purple-600 dark:text-purple-400 font-bold">🏆 當前稱號:</span>
+                    <span id="user-rank-title" class="font-bold text-slate-700 dark:text-slate-200">時間新手小當家</span>
+                </div>
+                <div class="text-slate-400 font-cute">
+                    未抽牌組: <span id="deck-remaining-count" class="text-purple-600 dark:text-purple-400 font-bold">32</span> / 32 題
+                </div>
+            </div>
+
+            <!-- Two Clean Mode Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <!-- Game Mode 1: Task Priority Deck -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center text-xl font-bold">
+                            🎴
+                        </div>
+                        <h2 class="font-bold text-base text-slate-800 dark:text-slate-100">國一生活卡牌抽牌 (5卡特訓)</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                            從實體卡牌堆親自抽牌！輕鬆面對段考、手遊誘惑、IG梗圖與聯絡簿等真實情境，訓練果斷抓緊時間！
+                        </p>
+                    </div>
+                    <button onclick="app.startGame('classic')" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-hand-pointer"></i> 開始 5 卡抽牌特訓
+                    </button>
+                </div>
+
+                <!-- Game Mode 2: Fast Answer / Blitz Decision Card -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="w-10 h-10 rounded-2xl bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-300 flex items-center justify-center text-xl font-bold">
+                            ⚡
+                        </div>
+                        <h2 class="font-bold text-base text-slate-800 dark:text-slate-100">抓緊時間快問快答 (60秒快刷)</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                            60 秒高壓極速抽牌！訓練面對時間黑洞時的「直覺反射力」，在短時間內做出最正確的專注抉擇！
+                        </p>
+                    </div>
+                    <button onclick="app.startGame('blitz')" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bolt"></i> 開始 60 秒快刷挑戰
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= VIEW 2: GAME ARENA ================= -->
+        <section id="tab-game" class="hidden space-y-4">
+            
+            <!-- Game HUD Header -->
+            <div class="bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-2xl p-3 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-between text-xs">
+                <button onclick="app.quitGame()" class="font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-left"></i> 返回大廳
+                </button>
+
+                <div class="flex items-center gap-3 font-bold">
+                    <div class="text-amber-600 dark:text-amber-400">
+                        🔥 連擊: <span id="game-combo" class="font-cute text-sm">0x</span>
+                    </div>
+                    <div id="blitz-timer-chip" class="hidden bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 px-2.5 py-0.5 rounded-full border border-rose-200 dark:border-rose-800 animate-pulse">
+                        ⏱️ <span id="game-timer" class="font-cute text-sm">60</span>s
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Interactive Canvas Arena -->
+            <div class="relative bg-white/70 dark:bg-slate-900/70 backdrop-blur border border-slate-200/80 dark:border-slate-800 rounded-3xl min-h-[420px] p-5 flex flex-col items-center justify-center">
+                
+                <!-- Deck Stack (Click to Draw) -->
+                <div id="deck-draw-prompt" class="flex flex-col items-center gap-4 cursor-pointer" onclick="game.drawCard()">
+                    
+                    <!-- 3D Card Stack Visual -->
+                    <div class="relative w-44 h-60">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-300 to-indigo-400 rounded-2xl border-2 border-white shadow-md deck-layer-3 opacity-60"></div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-2xl border-2 border-white shadow-md deck-layer-2 opacity-80"></div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500 via-indigo-500 to-purple-600 rounded-2xl border-2 border-white shadow-xl deck-layer-1 flex flex-col items-center justify-center text-white p-4 text-center transform hover:scale-105 transition duration-200">
+                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl mb-2 backdrop-blur">
+                                ⏳
+                            </div>
+                            <span class="font-cute font-bold text-base tracking-wider">點擊抽卡</span>
+                            <span class="text-[11px] text-purple-200 mt-1">國一時間生活卡牌</span>
+                        </div>
+                    </div>
+
+                    <button class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold px-6 py-2.5 rounded-xl text-xs shadow-sm transition bounce-short flex items-center gap-1.5">
+                        ✨ 點擊抽出一張卡牌！
+                    </button>
+                </div>
+
+                <!-- Drawn Active Card Display -->
+                <div id="active-card-container" class="hidden w-full max-w-md animate-draw">
+                    
+                    <div class="bg-white dark:bg-slate-900 border-2 border-purple-200 dark:border-purple-800 rounded-3xl p-5 shadow-lg space-y-3 relative">
+                        
+                        <!-- Card Header Category -->
+                        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                            <span id="card-category" class="bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                                🏫 學校日常
+                            </span>
+                            <span id="card-progress-tag" class="text-xs font-cute text-slate-400">
+                                CARD 1 / 5
+                            </span>
+                        </div>
+
+                        <!-- Question Scenario -->
+                        <div class="space-y-2">
+                            <h3 id="card-title" class="text-base font-bold text-slate-800 dark:text-slate-100 leading-snug">
+                                明天國文要考注音解釋，現在 IG 上大家都在發考前梗圖...
+                            </h3>
+                            <p id="card-story" class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                朋友們在群組狂刷梗圖爆笑討論，你剛打開課本準備背解釋，手機一直響個不停，心裡超想加入聊天...
+                            </p>
+                        </div>
+
+                        <!-- Decision Option Buttons (Dynamically Populated & Shuffled) -->
+                        <div id="options-container" class="space-y-2 pt-1">
+                            <!-- Option buttons injected dynamically with shuffled order -->
+                        </div>
+
+                        <!-- Feedback Box -->
+                        <div id="card-feedback-box" class="hidden p-3 rounded-2xl text-xs space-y-1">
+                            <div id="feedback-result-title" class="font-bold flex items-center gap-1.5 text-xs"></div>
+                            <p id="feedback-result-desc" class="leading-relaxed text-[11px]"></p>
+                        </div>
+
+                    </div>
+
+                    <!-- Next Card Action Button -->
+                    <div id="next-card-btn-container" class="hidden mt-3 text-center">
+                        <button onclick="game.nextStep()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow-sm transition inline-flex items-center gap-1.5">
+                            繼續抽下一張牌 <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= VIEW 3: GAME RESULT ================= -->
+        <section id="tab-result" class="hidden max-w-sm mx-auto w-full my-auto">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 text-center space-y-5 shadow-sm">
+                
+                <div class="space-y-1">
+                    <span class="bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                        🎉 特訓完成
+                    </span>
+                    <h2 class="text-xl font-bold text-slate-800 dark:text-slate-100 mt-1">時間卡牌特訓結算</h2>
+                </div>
+
+                <div class="space-y-1">
+                    <div id="result-stars" class="text-2xl text-amber-400 space-x-1">
+                        ⭐ ⭐ ⭐
+                    </div>
+                    <p id="result-rank-comment" class="text-xs font-bold text-purple-600 dark:text-purple-400">
+                        太厲害了！你是絕佳的時間抓緊大師！
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-3.5 text-left space-y-2 text-xs">
+                    <div class="flex justify-between border-b border-slate-200/60 dark:border-slate-700 pb-1.5">
+                        <span class="text-slate-500 dark:text-slate-400">獲得時間能量</span>
+                        <span id="result-energy-earned" class="font-cute font-bold text-amber-600 dark:text-amber-400 text-sm">+150 ⚡</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-200/60 dark:border-slate-700 pb-1.5">
+                        <span class="text-slate-500 dark:text-slate-400">果斷正確決策</span>
+                        <span id="result-correct-count" class="font-cute font-bold text-slate-700 dark:text-slate-200">5 / 5 卡</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500 dark:text-slate-400">最高連擊 (Max Combo)</span>
+                        <span id="result-max-combo" class="font-cute font-bold text-purple-600 dark:text-purple-400">5x</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-2.5 pt-1">
+                    <button onclick="app.showTab('dashboard')" class="flex-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2.5 rounded-xl text-xs transition">
+                        返回大廳
+                    </button>
+                    <button onclick="app.startGame('classic')" class="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-sm">
+                        再抽一次牌 🃏
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center text-[11px] text-slate-400 py-2">
+        時間卡牌大冒險 • 每天練習抓緊時間 🚀
+    </footer>
+
+    <script>
+        /* Web Audio Synthesizer with BGM Music Loop */
+        class SoundController {
+            constructor() {
+                this.enabled = true;
+                this.bgmEnabled = false;
+                this.ctx = null;
+                this.bgmInterval = null;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            toggleSound() {
+                this.enabled = !this.enabled;
+                const icon = document.getElementById('sound-icon');
+                if (this.enabled) {
+                    icon.className = 'fa-solid fa-volume-high';
+                } else {
+                    icon.className = 'fa-solid fa-volume-xmark text-slate-400';
+                }
+            }
+
+            toggleBGM() {
+                this.bgmEnabled = !this.bgmEnabled;
+                const icon = document.getElementById('bgm-icon');
+                if (this.bgmEnabled) {
+                    icon.className = 'fa-solid fa-music text-amber-500 animate-bounce';
+                    this.startBGM();
+                } else {
+                    icon.className = 'fa-solid fa-music text-purple-600 dark:text-purple-300';
+                    this.stopBGM();
+                }
+            }
+
+            startBGM() {
+                this.init();
+                this.stopBGM();
+                const bgmScale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
+                let idx = 0;
+
+                this.bgmInterval = setInterval(() => {
+                    if (!this.bgmEnabled) return;
+                    try {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.value = bgmScale[idx % bgmScale.length];
+                        gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.4);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + 0.4);
+                        idx++;
+                    } catch(e){}
+                }, 400);
+            }
+
+            stopBGM() {
+                if (this.bgmInterval) {
+                    clearInterval(this.bgmInterval);
+                    this.bgmInterval = null;
+                }
+            }
+
+            playBeep(freq = 440, type = 'sine', duration = 0.1) {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e){}
+            }
+
+            playDraw() {
+                this.playBeep(350, 'triangle', 0.08);
+                setTimeout(() => this.playBeep(500, 'triangle', 0.1), 50);
+            }
+
+            playCorrect() {
+                this.playBeep(523.25, 'triangle', 0.1);
+                setTimeout(() => this.playBeep(659.25, 'triangle', 0.1), 80);
+                setTimeout(() => this.playBeep(783.99, 'triangle', 0.15), 160);
+            }
+
+            playWrong() {
+                this.playBeep(220, 'sawtooth', 0.1);
+                setTimeout(() => this.playBeep(180, 'sawtooth', 0.18), 90);
+            }
+        }
+
+        const sound = new SoundController();
+
+        const QUESTION_DATABASE = [
+            {
+                id: 1,
+                category: "🏫 學校與段考日常",
+                title: "明天國文要考注音解釋，現在 IG 上大家都在發考前梗圖...",
+                story: "朋友們在群組狂刷梗圖爆笑討論，你剛打開課本準備背解釋，手機一直響個不停，心裡超想加入聊天...",
+                optA: "🎯 抓緊時間：先關手機通知專心背 15 分鐘，背完再看梗圖！",
+                optB: "😈 掉入拖延：先滑一下梗圖放鬆，反正背解釋很快啦！",
+                correct: "A",
+                feedbackCorrect: "🎉 太讚了！先把最困難的注音解釋搞定，待會看梗圖完全沒有罪惡感！",
+                feedbackWrong: "⚠️ 掉入拖延怪陷阱了！梗圖一滑往往就是 30 分鐘，等發現時已經深夜很累了。"
+            },
+            {
+                id: 2,
+                category: "🎮 手遊與娛樂誘惑",
+                title: "段考前一天晚上，手遊《傳說對決》突然跳出限定雙倍經驗活動...",
+                story: "戰友在群組瘋狂 Tag 你：「還差你一個！打完這把就上王者！」但你數學講義還有兩頁沒算完...",
+                optA: "😈 掉入拖延：先打一把就好，勝率很高應該很快結束！",
+                optB: "🎯 抓緊時間：跟戰友說「段考後爆打一整晚」，現在先算數學！",
+                correct: "B",
+                feedbackCorrect: "🔥 果斷！真正的王者知道段考成績才是拿獎學金跟快樂打牌的底氣！",
+                feedbackWrong: "⚠️ 一把常常變三把！遇到輸了還想贏回來，整個晚上就毀掉了。"
+            },
+            {
+                id: 3,
+                category: "📱 短影音與社群通知",
+                title: "補習班理化作業寫到一半，TikTok 跳出追蹤網紅的最新影片...",
+                story: "這題理化化學式有點難算，你手很自然地滑向手機，心想「看一支 15 秒影片換換腦袋」...",
+                optA: "🎯 抓緊時間：把手機拿到客廳放，把這題化學式算完再休息！",
+                optB: "😈 掉入拖延：就看 15 秒短影音放鬆一下下...",
+                correct: "A",
+                feedbackCorrect: "💪 聰明！短影音演算法會讓你一支接一支，拿遠手機是最好的防禦手段！",
+                feedbackWrong: "⚠️ 15 秒短影音是最大的魔咒！不知不覺演算法就刷掉了你半小時。"
+            },
+            {
+                id: 4,
+                category: "📋 聯絡簿與家長簽名",
+                title: "晚上 9 點準備收拾書包，發現聯絡簿忘記給家長簽名...",
+                story: "媽媽正在客廳看電視，你心裡想：「明天早上出門前再簽好了，現在不想動...」",
+                optA: "🎯 抓緊時間：立刻拿去給媽媽簽名，順便檢查明天有沒有帶齊物品！",
+                optB: "😈 掉入拖延：明天早上再簽，反正只要 10 秒鐘...",
+                correct: "A",
+                feedbackCorrect: "✨ 太棒了！抓緊這 10 秒，明天早上就不會手忙腳亂找不到簽名筆！",
+                feedbackWrong: "⚠️ 早上往往最匆忙！萬一媽媽剛好在洗澡或趕出門，聯絡簿就沒簽到了。"
+            },
+            {
+                id: 5,
+                category: "🏃 體育課與體能考驗",
+                title: "下週體育課要測 800 公尺跑走，朋友找你去買手搖飲放鬆...",
+                story: "今天放學天氣很好，你原本打算在操場跑兩圈練習，但朋友一直揪你喝黑糖珍珠鮮奶...",
+                optA: "🎯 抓緊時間：操場跑完兩圈後再去買手搖飲！",
+                optB: "😈 掉入拖延：今天太累了，下週再練，先喝飲料！",
+                correct: "A",
+                feedbackCorrect: "🏃‍♂️ 體能跟時間一樣需要累積！先練完再喝，飲料喝起來更香！",
+                feedbackWrong: "⚠️ 拖到下週就會演變成完全沒練習，測驗當天肺會超級痛！"
+            },
+            {
+                id: 6,
+                category: "🧹 假性勤勞拖延怪",
+                title: "打算要認真讀英文，突然覺得書桌超級亂想先來大掃除...",
+                story: "桌上有三支沒墨水的筆、上個星期的考卷跟未吃完的零食袋。你心想「環境不乾淨怎麼讀書呢」...",
+                optA: "🎯 抓緊時間：用 10 秒把雜物推到邊邊，立刻打開英文單字本！",
+                optB: "😈 掉入拖延：把整張書桌整理乾淨，再順便收拾房間...",
+                correct: "A",
+                feedbackCorrect: "🎯 大掃除是拖延怪最常見的假裝勤勞手段！專注於真正的目標才是王道。",
+                feedbackWrong: "⚠️ 整理完房間通常花了一小時，然後你就覺得「今天好累明天再讀英文」了！"
+            },
+            {
+                id: 7,
+                category: "🎨 美術作業與手作",
+                title: "明天第一節要交美術畫作，你現在只畫好了草稿...",
+                story: "這張畫至少還要上色一小時，現在晚上 10 點了，你想說「先去洗澡順便玩水放空」...",
+                optA: "🎯 抓緊時間：先調好顏料上色 30 分鐘，完成主體再去洗澡！",
+                optB: "😈 掉入拖延：先去洗澡放空，洗完澡再來趕工...",
+                correct: "A",
+                feedbackCorrect: "🎨 太智慧了！先把最棘手的上色搞定，洗澡時就能放鬆享受洗熱水澡！",
+                feedbackWrong: "⚠️ 洗完澡體溫升高容易昏昏欲睡，這時候上色非常容易塗出框外。"
+            },
+            {
+                id: 8,
+                category: "📚 數學講義與抽查",
+                title: "數學老師說明天要抽查講義，但心裡好想追最新動漫...",
+                story: "動漫完結篇剛好今天更新！討論區全都在爆雷，但你講義還有 3 頁沒寫...",
+                optA: "🎯 抓緊時間：關掉論壇避開爆雷，先集中火力把 3 頁算完！",
+                optB: "😈 掉入拖延：先看動漫 20 分鐘，看完比較有動力寫數學...",
+                correct: "A",
+                feedbackCorrect: "👏 完美避雷！算完數學後心無旁騖地看動漫，才是最高享受！",
+                feedbackWrong: "⚠️ 看完動漫通常情緒太興奮，根本靜不下心來算複雜的數學公式。"
+            },
+            {
+                id: 9,
+                category: "😴 早上起床鬧鐘戰",
+                title: "早上 6:30 鬧鐘響起，你覺得眼睛好重，手摸到了鬧鐘的「貪睡按鈕」...",
+                story: "貪睡按鈕可以讓你再睡 5 分鐘，但只要按了，待會公車可能就會趕不上...",
+                optA: "🎯 抓緊時間：立刻坐起身來，雙腳踩到地板上！",
+                optB: "😈 掉入拖延：按下貪睡按鈕，再瞇 5 分鐘就好...",
+                correct: "A",
+                feedbackCorrect: "☀️ 只要雙腳踩地就贏了 80%！避免了早上瘋狂狂奔趕公車的慘劇。",
+                feedbackWrong: "⚠️ 貪睡的 5 分鐘品質極差，而且通常會演變成貪睡 20 分鐘遲到被罰站！"
+            },
+            {
+                id: 10,
+                category: "🍱 晚餐後的黃金時間",
+                title: "吃完晚餐覺得肚子好飽，心裡浮現「先躺沙發滑手機 10 分鐘」...",
+                story: "吃飽飯血液都在胃部，特別容易昏沉沉，沙發看起來超級舒服...",
+                optA: "🎯 抓緊時間：站起來幫忙洗個碗或喝杯水，順便散步清醒一下！",
+                optB: "😈 掉入拖延：順從身體的渴望，躺上沙發滑手機...",
+                correct: "A",
+                feedbackCorrect: "💡 聰明！動一動可以加速血液循環，迅速擺脫飯後昏沉感！",
+                feedbackWrong: "⚠️ 躺上沙發滑手機，99% 會直接昏睡或不知不覺滑到晚上 9 點。"
+            },
+            {
+                id: 11,
+                category: "👥 小組報告與討論",
+                title: "學校社團要做分組簡報，組員們開始聊起最近的新聞娛樂八卦...",
+                story: "大家討論得很開心，完全忘記簡報大綱還沒定下來，距離放學只剩 15 分鐘...",
+                optA: "🎯 抓緊時間：提醒大家「我們花 5 分鐘把大綱列好，剩下的回家再聊」！",
+                optB: "😈 掉入拖延：加入八卦陣容，反正大家也沒在做...",
+                correct: "A",
+                feedbackCorrect: "👑 你就是組裡的定海神針！抓緊時間討論，才不會回家還要獨自熬夜趕報告。",
+                feedbackWrong: "⚠️ 大家一起拖延的下場，就是最後要有人當冤大頭回家包辦全部簡報。"
+            },
+            {
+                id: 12,
+                category: "🚌 補習前的零碎時間",
+                title: "距離搭公車去補習還有 20 分鐘空檔，你坐在書桌前...",
+                story: "20 分鐘感覺做不了什麼大事情，你考慮要發呆還是拿出單字卡...",
+                optA: "🎯 抓緊時間：拿出英文單字卡，背 10 個單字也算賺到！",
+                optB: "😈 掉入拖延：時間太短了做不了事，滑手機等時間到...",
+                correct: "A",
+                feedbackCorrect: "⏱️ 抓緊零碎時間的大師！每天累積 20 分鐘，一年就比別人多讀超多書！",
+                feedbackWrong: "⚠️ 零碎時間是時間流失的最大黑洞，滑手機往往會讓你忘記公車時間。"
+            },
+            {
+                id: 13,
+                category: "🛁 洗澡前的沉迷魔咒",
+                title: "媽媽喊你去洗澡，你正坐在電腦前看 YouTube 影片...",
+                story: "這支 YouTube 影片還有 8 分鐘，你心裡想「看完這支再去洗，不然斷掉很難受」...",
+                optA: "🎯 抓緊時間：按暫停鍵，立刻拿衣服去洗澡！洗完再繼續看。",
+                optB: "😈 掉入拖延：看完整支影片再去洗澡...",
+                correct: "A",
+                feedbackCorrect: "🛁 太棒了！按暫停不需要勇氣，只需要果斷！洗完澡身心舒暢看更爽！",
+                feedbackWrong: "⚠️ 看完這支，側邊推薦影片又會跳出另一支更吸引你的，永無止境！"
+            },
+            {
+                id: 14,
+                category: "📝 考前讀書計畫表",
+                title: "段考前一週，你想擬定一個超級完美的讀書計畫表...",
+                story: "你拿出了彩色筆、尺與漂亮的筆記本，準備花一整晚設計漂亮的排版...",
+                optA: "🎯 抓緊時間：用鉛筆 3 分鐘寫下每日重點，立刻開始讀第一科！",
+                optB: "😈 掉入拖延：花兩小時把計畫表塗鴉得像藝術品一樣...",
+                correct: "A",
+                feedbackCorrect: "✍️ 計畫表是用來執行的，不是用來參展的！抓緊時間執行才有用！",
+                feedbackWrong: "⚠️ 花兩小時畫計畫表只會給大腦「我已經讀完書」的錯覺，實際上什麼都沒讀。"
+            },
+            {
+                id: 15,
+                category: "📖 錯題檢討與檢視",
+                title: "發下發回的理化考卷發現錯了很多題，你覺得好挫折...",
+                story: "看到滿滿紅字很不想面對，心想「考卷先收進抽屜，下週再檢討好了」...",
+                optA: "🎯 抓緊時間：趁現在記憶猶新，花 5 分鐘把最簡單的兩題錯題搞懂！",
+                optB: "😈 掉入拖延：塞進書包最底層，眼不見為淨...",
+                correct: "A",
+                feedbackCorrect: "🧠 剛考完檢討印象最深刻！花 5 分鐘搞懂，下次段考直接加 10 分！",
+                feedbackWrong: "⚠️ 塞進書包底層後，這些錯題就會一直放著，直到段考前再次考倒你。"
+            },
+            {
+                id: 16,
+                category: "💬 友達聊天與敲訊息",
+                title: "寫歷史作業寫到一半，朋友突然敲 Messenger 聊八卦...",
+                story: "朋友傳了一句：「欸你有聽說隔壁班的事情嗎？超誇張！」讓你好奇心爆棚...",
+                optA: "🎯 抓緊時間：回覆「我先寫作業，20分鐘後寫完跟你大聊！」",
+                optB: "😈 掉入拖延：立刻秒回「什麼事？？快告訴我！」",
+                correct: "A",
+                feedbackCorrect: "💬 這才是情商與時間管理兼具！朋友不會走，但作業能順利寫完！",
+                feedbackWrong: "⚠️ 一聊下去半小時就沒了，心神被打亂後要重新集中精神非常困難。"
+            },
+            {
+                id: 17,
+                category: "🎵 讀書背景音樂選擇",
+                title: "準備要開始寫英文作文，你打開音樂播放器想挑選背景音樂...",
+                story: "你一首接一首試聽，已經挑了 15 分鐘還沒挑到「完美的讀書 Mood」...",
+                optA: "🎯 抓緊時間：隨便點一個「純音樂/白噪音」播放清單，立刻開寫！",
+                optB: "😈 掉入拖延：繼續挑選，一定要找到最合適的流行歌曲...",
+                correct: "A",
+                feedbackCorrect: "🎵 背景音樂只是配角，英文作文才是主角！純音樂不易分散注意力！",
+                feedbackWrong: "⚠️ 挑音樂挑到最後常常變成在看 MV，完全忘記原本要寫作文。"
+            },
+            {
+                id: 18,
+                category: "🎒 放學回家第一件事",
+                title: "剛放學回家全身很累，鞋子脫了看到舒服的沙發...",
+                story: "你想說「先躺平 20 分鐘放空，待會再去洗手吃點心寫作業」...",
+                optA: "🎯 抓緊時間：先去洗手、拿出書包裡的聯絡簿放在桌上再去休息！",
+                optB: "😈 掉入拖延：直接整個人癱倒在沙發上...",
+                correct: "A",
+                feedbackCorrect: "🎒 順手完成微小的動作，能維持大腦的行動慣性，待會要啟動更容易！",
+                feedbackWrong: "⚠️ 癱倒後骨頭就軟了，要再站起來需要花雙倍的意志力。"
+            },
+            {
+                id: 19,
+                category: "💡 卡關的數學題目",
+                title: "算數學卡在一題複雜幾何題，卡了 15 分鐘毫無頭緒...",
+                story: "你坐在那裡死盯著題目發呆，心情越來越沮喪與煩躁...",
+                optA: "🎯 抓緊時間：先做個記號跳過，把後面會寫的算完，待會問老師或同學！",
+                optB: "😈 掉入拖延：跟這題死磕到底，就算發呆 30 分鐘也不放棄...",
+                correct: "A",
+                feedbackCorrect: "🧩 懂得果斷跳過也是抓緊時間的智慧！等整份寫完大腦搞不好就突然想通了！",
+                feedbackWrong: "⚠️ 死磕發呆只會浪費時間並累積沮喪感，讓你不想繼續寫其他科。"
+            },
+            {
+                id: 20,
+                category: "🍕 寫作業時的嘴饞零食",
+                title: "讀書讀到一半覺得嘴巴很無聊，想去廚房拿一包洋芋片...",
+                story: "洋芋片會沾滿手指，一邊吃一邊寫作業會把講義用得油油的...",
+                optA: "🎯 抓緊時間：改喝一口溫開水，告訴自己「讀完這一章再當獎勵吃」！",
+                optB: "😈 掉入拖延：邊吃洋芋片邊寫，反正不影響...",
+                correct: "A",
+                feedbackCorrect: "🥤 完美的延遲享樂！把零食當作讀完書的獎勵，吃起來更好吃！",
+                feedbackWrong: "⚠️ 手指油油的會讓你一直停下來擦手，讀書節奏完全被切碎。"
+            },
+            {
+                id: 21,
+                category: "🏫 晨讀時間的運用",
+                title: "早上 7:30 到校晨讀時間，班上有些同學在聊天走動...",
+                story: "距離早自習考英文還有 20 分鐘，環境有點吵雜...",
+                optA: "🎯 抓緊時間：戴上耳塞或專注看單字，不受旁人影響！",
+                optB: "😈 掉入拖延：加入聊天，反正大家也沒在讀...",
+                correct: "A",
+                feedbackCorrect: "🛡️ 擁有自動屏蔽噪音的能力！考前這 20 分鐘背的單字常常剛好考出來！",
+                feedbackWrong: "⚠️ 別人拖延不代表你也要著拖延，等考卷發下來就知道痛苦了。"
+            },
+            {
+                id: 22,
+                category: "📱 IG / Threads 訊息發文",
+                title: "心血來潮發了一篇漂亮的 Threads 動態，隔 3 分鐘就想刷一次...",
+                story: "你一直想看有沒有人按讚或留言，心神不定根本沒辦法專心讀書...",
+                optA: "🎯 抓緊時間：把手機設定「專注模式/關閉通知」，定時 45 分鐘後再看！",
+                optB: "😈 掉入拖延：把手機放在課本旁邊，每 2 分鐘解鎖偷看一次...",
+                correct: "A",
+                feedbackCorrect: "🔕 設定專注模式是強者必備技能！讚不會跑掉，但你的注意力會！",
+                feedbackWrong: "⚠️ 頻繁注意力切換會讓大腦極度疲勞，讀書效率直接下降 70%。"
+            },
+            {
+                id: 23,
+                category: "🎒 遺漏課本與求助",
+                title: "準備寫歷史作業，突然發現歷史課本放在學校抽屜沒帶回家...",
+                story: "你懊惱了一下，心想「糟糕沒課本寫不了，今天先不寫了好了」...",
+                optA: "🎯 抓緊時間：立刻打給同學請他拍這兩頁課本給你，繼續寫！",
+                optB: "😈 掉入拖延：太好了有藉口不用寫，直接去打電玩！",
+                correct: "A",
+                feedbackCorrect: "📞 遇到問題立刻找替代方案！這就是不給拖延怪任何可趁之機！",
+                feedbackWrong: "⚠️ 明天去學校要補寫兩倍的量，只會讓自己更痛苦。"
+            },
+            {
+                id: 24,
+                category: "⏰ 假日睡到自然醒",
+                title: "週六早上起床已經 10:30 了，覺得今天半天已經過去了很不爽...",
+                story: "你覺得今天時間都被毀了，心想「算了今天乾脆擺爛，明天再認真讀」...",
+                optA: "🎯 抓緊時間：擺脫罪惡感！吃個早午餐，從 11:30 開始抓緊下半天！",
+                optB: "😈 掉入拖延：繼續躺在床上擺爛滑手機，浪費一整天...",
+                correct: "A",
+                feedbackCorrect: "🌅 永遠不嫌晚！抓緊剩下的時間，依然可以過得非常充實！",
+                feedbackWrong: "⚠️ 全無或全有思維是拖延的好朋友，擺爛只會讓週日晚上更焦慮。"
+            },
+            {
+                id: 25,
+                category: "📝 口頭報告演練",
+                title: "明天要上台做英文口頭報告，你心跳很快有點逃避焦慮...",
+                story: "越緊張越不想面對，你一直看手機想轉移注意力...",
+                optA: "🎯 抓緊時間：拿著講稿對著鏡子完整的唸一遍，只要一遍就好！",
+                optB: "😈 掉入拖延：繼續逃避看手機，祈禱明天老師抽不到自己...",
+                correct: "A",
+                feedbackCorrect: "🎤 面對焦慮最好的武器就是「開始行動」！練習過一次心裡就踏實多了！",
+                feedbackWrong: "⚠️ 逃避不會讓焦慮消失，只會讓你在台上講得結結巴巴更尷尬。"
+            },
+            {
+                id: 26,
+                category: "🛍️ 買文具與選用具",
+                title: "去文具店買黑筆，看到整排五顏六色的文具與可愛貼紙...",
+                story: "你不知不覺逛了 40 分鐘，還在猶豫要買哪一種圖案的修正帶...",
+                optA: "🎯 抓緊時間：拿了常用的黑筆立刻去結帳，不逗留！",
+                optB: "😈 掉入拖延：繼續慢悠悠逛，買一堆用不到的可愛小物...",
+                correct: "A",
+                feedbackCorrect: "🛒 目標明確！文具店也是時間黑洞之一，抓緊時間買完就撤！",
+                feedbackWrong: "⚠️ 在文具店浪費了一小時，回家的作業時間又被壓縮了。"
+            },
+            {
+                id: 27,
+                category: "🏀 放學打籃球過頭",
+                title: "放學跟同學在操場打 3 戰 3 勝籃球，原本說打到 5:30 就要回家...",
+                story: "5:28 時輸了一場，大家不服氣大喊：「不行！再打最後一場再走！」...",
+                optA: "🎯 抓緊時間：跟同學擊掌道別「今天很開心，我先回家，下次再戰！」",
+                optB: "😈 掉入拖延：繼續加打，打到天黑看不見球為止...",
+                correct: "A",
+                feedbackCorrect: "🏀 守時的人最帥氣！享受了運動，又守住了回家後的專注時間！",
+                feedbackWrong: "⚠️ 打到天黑回家又累又餓，洗完澡直接癱軟無法寫作業。"
+            },
+            {
+                id: 28,
+                category: "💤 睡前滑手機習慣",
+                title: "晚上 11:00 躺在床上準備睡覺，手賤又解鎖了手機...",
+                story: "你打算「看一下氣象預報就好」，結果看到了很有趣的梗圖專頁...",
+                optA: "🎯 抓緊時間：把手機放在距離床鋪需要站起來才拿得到的桌上，關燈睡覺！",
+                optB: "😈 掉入拖延：邊躺著邊看梗圖，不知不覺滑到半夜 1:00...",
+                correct: "A",
+                feedbackCorrect: "😴 睡眠品質是一切效率的基石！遠離手機才能睡個香甜好覺！",
+                feedbackWrong: "⚠️ 熬夜滑手機隔天精神超差，上課聽不懂又要花雙倍時間補救。"
+            },
+            {
+                id: 29,
+                category: "🎒 理化實驗器材準備",
+                title: "明天理化課要帶寶特瓶跟剪刀做實驗，你剛洗完澡準備睡覺...",
+                story: "突然想起器材還沒準備，你心想「算了，明天早上出門再拿...」",
+                optA: "🎯 抓緊時間：花 1 分鐘到廚房拿寶特瓶放進書包，再安心去睡覺！",
+                optB: "😈 掉入拖延：明天早上再找，反正廚房應該有...",
+                correct: "A",
+                feedbackCorrect: "🍾 今晚準備好，明早零煩惱！這就是抓緊時間帶來的安心感！",
+                feedbackWrong: "⚠️ 早上急著趕出門，90% 會忘記拿，到了學校只能跟別組借。"
+            },
+            {
+                id: 30,
+                category: "🎉 段考結束第一天",
+                title: "今天段考終於考完了！放學一回到家覺得一身輕鬆...",
+                story: "你決定狂打手遊 5 小時，完全不打算動任何東西...",
+                optA: "🎯 抓緊時間：好好的玩 2 小時，但也花 10 分鐘把段考考卷整理進資料夾！",
+                optB: "😈 掉入拖延：整天瘋狂打電玩，考卷亂扔到房間角落...",
+                correct: "A",
+                feedbackCorrect: "📂 慶祝的同時做好收尾！下次要複習時考卷就不會失蹤囉！",
+                feedbackWrong: "⚠️ 段考考卷亂扔，等下次大考要複習時會找考卷找得很崩潰。"
+            },
+            {
+                id: 31,
+                category: "📅 週日晚上的作業大山",
+                title: "週日晚上 8:00，發現週末作業還有兩科完全沒動...",
+                story: "你感到極度恐慌與焦慮，手腳發麻不知所措...",
+                optA: "🎯 抓緊時間：深呼吸，先挑「題數最少、最簡單」的那一科立刻開始寫！",
+                optB: "😈 掉入拖延：坐在那裡絕望發呆，開始抱怨作業為什麼這麼多...",
+                correct: "A",
+                feedbackCorrect: "🚀 破解焦慮的方法只有「開始」！從簡單的開始寫，信心立刻回升！",
+                feedbackWrong: "⚠️ 絕望發呆只會讓時間流逝得更快，最後只能半夜抄答案。"
+            },
+            {
+                id: 32,
+                category: "📖 英文單字庫複習",
+                title: "這週有 50 個英文單字要考，你打算怎麼安排時間？",
+                story: "你可以選擇每天背 10 個，或者週四晚上一次背 50 個...",
+                optA: "🎯 抓緊時間：每天花 5 分鐘背 10 個，善用少次多量的記憶規律！",
+                optB: "😈 掉入拖延：全部塞到週四晚上再一次背完，比較痛快...",
+                correct: "A",
+                feedbackCorrect: "🧠 大腦記憶運作的王道！每天 5 分鐘比考前塞一晚記得久 10 倍！",
+                feedbackWrong: "⚠️ 一次塞 50 個單字大腦會嚴重排斥，而且考完第二天就會全部忘光。"
+            }
+        ];
+
+        class Application {
+            constructor() {
+                this.userData = {
+                    energy: 0,
+                    theme: 'theme-cream',
+                    playedQuestionIds: []
+                };
+                this.loadData();
+            }
+
+            loadData() {
+                const saved = localStorage.getItem('chrono_clean_card_data');
+                if (saved) {
+                    try {
+                        this.userData = { ...this.userData, ...JSON.parse(saved) };
+                    } catch(e){}
+                }
+                this.setTheme(this.userData.theme || 'theme-cream');
+                this.updateUI();
+            }
+
+            saveData() {
+                localStorage.setItem('chrono_clean_card_data', JSON.stringify(this.userData));
+                this.updateUI();
+            }
+
+            setTheme(themeName) {
+                this.userData.theme = themeName;
+                
+                // Toggle Dark Mode class for Tailwind if theme-dark
+                if (themeName === 'theme-dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+
+                document.body.className = `${themeName} min-h-screen flex flex-col justify-between p-3 md:p-6`;
+
+                // Update active state indicator dot styling
+                document.querySelectorAll('.theme-dot-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                const activeDot = document.getElementById(`dot-${themeName}`);
+                if (activeDot) {
+                    activeDot.classList.add('active');
+                }
+
+                localStorage.setItem('chrono_clean_card_data', JSON.stringify(this.userData));
+            }
+
+            updateUI() {
+                document.getElementById('header-energy').innerText = this.userData.energy;
+                const remaining = QUESTION_DATABASE.length - this.userData.playedQuestionIds.length;
+                document.getElementById('deck-remaining-count').innerText = remaining;
+
+                let rank = "時間新手小當家";
+                if (this.userData.energy >= 1200) rank = "超時空時間戰神 👑";
+                else if (this.userData.energy >= 600) rank = "國中時間掌控達人 ⚡";
+                else if (this.userData.energy >= 250) rank = "果斷行動尖兵 ✨";
+
+                document.getElementById('user-rank-title').innerText = rank;
+            }
+
+            showTab(tabName) {
+                sound.playDraw();
+                document.getElementById('tab-dashboard').classList.add('hidden');
+                document.getElementById('tab-game').classList.add('hidden');
+                document.getElementById('tab-result').classList.add('hidden');
+
+                document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            }
+
+            startGame(mode = 'classic') {
+                this.showTab('game');
+                game.initGame(mode);
+            }
+
+            quitGame() {
+                game.stopTimer();
+                this.showTab('dashboard');
+            }
+        }
+
+        class GameEngine {
+            constructor() {
+                this.mode = 'classic';
+                this.currentRoundCards = [];
+                this.cardIndex = 0;
+                this.score = 0;
+                this.combo = 0;
+                this.maxCombo = 0;
+                this.correctCount = 0;
+                this.blitzTimeLeft = 60;
+                this.blitzTimer = null;
+                this.activeCard = null;
+                this.hasAnsweredCurrent = false;
+            }
+
+            initGame(mode) {
+                this.mode = mode;
+                this.score = 0;
+                this.combo = 0;
+                this.maxCombo = 0;
+                this.correctCount = 0;
+                this.cardIndex = 0;
+                this.hasAnsweredCurrent = false;
+
+                this.prepareCardDeck();
+
+                document.getElementById('game-combo').innerText = '0x';
+
+                const blitzChip = document.getElementById('blitz-timer-chip');
+                if (mode === 'blitz') {
+                    blitzChip.classList.remove('hidden');
+                    this.blitzTimeLeft = 60;
+                    document.getElementById('game-timer').innerText = this.blitzTimeLeft;
+                    this.startBlitzTimer();
+                } else {
+                    blitzChip.classList.add('hidden');
+                }
+
+                document.getElementById('deck-draw-prompt').classList.remove('hidden');
+                document.getElementById('active-card-container').classList.add('hidden');
+            }
+
+            prepareCardDeck() {
+                let unplayed = QUESTION_DATABASE.filter(q => !app.userData.playedQuestionIds.includes(q.id));
+
+                if (unplayed.length === 0) {
+                    app.userData.playedQuestionIds = [];
+                    app.saveData();
+                    unplayed = [...QUESTION_DATABASE];
+                }
+
+                // Fisher-Yates Shuffle Algorithm
+                for (let i = unplayed.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [unplayed[i], unplayed[j]] = [unplayed[j], unplayed[i]];
+                }
+
+                if (this.mode === 'classic') {
+                    this.currentRoundCards = unplayed.slice(0, 5);
+                } else {
+                    this.currentRoundCards = unplayed;
+                }
+            }
+
+            drawCard() {
+                if (this.cardIndex >= this.currentRoundCards.length) {
+                    this.finishGame();
+                    return;
+                }
+
+                sound.playDraw();
+                this.hasAnsweredCurrent = false;
+                this.activeCard = this.currentRoundCards[this.cardIndex];
+
+                document.getElementById('deck-draw-prompt').classList.add('hidden');
+                const container = document.getElementById('active-card-container');
+                container.classList.remove('hidden');
+                container.classList.remove('animate-draw');
+                void container.offsetWidth;
+                container.classList.add('animate-draw');
+
+                document.getElementById('card-category').innerText = this.activeCard.category;
+                document.getElementById('card-progress-tag').innerText = `CARD ${this.cardIndex + 1} / ${this.currentRoundCards.length}`;
+                document.getElementById('card-title').innerText = this.activeCard.title;
+                document.getElementById('card-story').innerText = this.activeCard.story;
+
+                // Prepare and Shuffle Options Order Dynamically
+                const optionsList = [
+                    { key: 'A', text: this.activeCard.optA, isCorrect: (this.activeCard.correct === 'A') },
+                    { key: 'B', text: this.activeCard.optB, isCorrect: (this.activeCard.correct === 'B') }
+                ];
+
+                // Shuffle options order randomly
+                for (let i = optionsList.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsList[i], optionsList[j]] = [optionsList[j], optionsList[i]];
+                }
+
+                const optionsContainer = document.getElementById('options-container');
+                optionsContainer.innerHTML = '';
+
+                optionsList.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `w-full text-left p-3 rounded-2xl text-xs font-bold transition flex items-center justify-between group ${
+                        opt.isCorrect 
+                            ? 'bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100 dark:hover:bg-purple-900/60 border border-purple-200 dark:border-purple-800 text-slate-800 dark:text-slate-200' 
+                            : 'bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-800 text-slate-800 dark:text-slate-200'
+                    }`;
+                    
+                    btn.innerHTML = `
+                        <span>${opt.text}</span>
+                        <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
+                    `;
+                    
+                    btn.onclick = () => game.selectOption(opt.isCorrect);
+                    optionsContainer.appendChild(btn);
+                });
+
+                document.getElementById('card-feedback-box').classList.add('hidden');
+                document.getElementById('next-card-btn-container').classList.add('hidden');
+            }
+
+            selectOption(isCorrect) {
+                if (this.hasAnsweredCurrent) return;
+                this.hasAnsweredCurrent = true;
+
+                const feedbackBox = document.getElementById('card-feedback-box');
+                const feedbackTitle = document.getElementById('feedback-result-title');
+                const feedbackDesc = document.getElementById('feedback-result-desc');
+
+                // Disable all option buttons
+                const buttons = document.querySelectorAll('#options-container button');
+                buttons.forEach(btn => btn.disabled = true);
+
+                if (!app.userData.playedQuestionIds.includes(this.activeCard.id)) {
+                    app.userData.playedQuestionIds.push(this.activeCard.id);
+                }
+
+                if (isCorrect) {
+                    sound.playCorrect();
+                    this.combo++;
+                    if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+                    this.correctCount++;
+                    this.score += 100 + (this.combo * 20);
+
+                    feedbackBox.className = "p-3 rounded-2xl text-xs space-y-1 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200";
+                    feedbackTitle.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> 果斷抉擇！時間掌控 +${100 + (this.combo * 20)}⚡`;
+                    feedbackDesc.innerText = this.activeCard.feedbackCorrect;
+                } else {
+                    sound.playWrong();
+                    this.combo = 0;
+
+                    feedbackBox.className = "p-3 rounded-2xl text-xs space-y-1 bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-200";
+                    feedbackTitle.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-500"></i> 掉入拖延陷阱！`;
+                    feedbackDesc.innerText = this.activeCard.feedbackWrong;
+                }
+
+                document.getElementById('game-combo').innerText = `${this.combo}x`;
+
+                feedbackBox.classList.remove('hidden');
+                document.getElementById('next-card-btn-container').classList.remove('hidden');
+
+                app.saveData();
+            }
+
+            nextStep() {
+                this.cardIndex++;
+                if (this.cardIndex >= this.currentRoundCards.length) {
+                    this.finishGame();
+                } else {
+                    this.drawCard();
+                }
+            }
+
+            startBlitzTimer() {
+                clearInterval(this.blitzTimer);
+                this.blitzTimer = setInterval(() => {
+                    this.blitzTimeLeft--;
+                    document.getElementById('game-timer').innerText = this.blitzTimeLeft;
+                    if (this.blitzTimeLeft <= 0) {
+                        this.stopTimer();
+                        this.finishGame();
+                    }
+                }, 1000);
+            }
+
+            stopTimer() {
+                clearInterval(this.blitzTimer);
+            }
+
+            finishGame() {
+                this.stopTimer();
+
+                const energyEarned = this.score;
+                app.userData.energy += energyEarned;
+                app.saveData();
+
+                document.getElementById('result-energy-earned').innerText = `+${energyEarned} ⚡`;
+                document.getElementById('result-correct-count').innerText = `${this.correctCount} / ${this.cardIndex} 卡`;
+                document.getElementById('result-max-combo').innerText = `${this.maxCombo}x`;
+
+                let comment = "繼續練習，讓決策更果斷！";
+                if (this.correctCount === this.cardIndex && this.cardIndex > 0) {
+                    comment = "🎉 太神的完美決策！你是時間大師！";
+                } else if (this.correctCount >= Math.floor(this.cardIndex * 0.7)) {
+                    comment = "👏 非常優異！成功抵抗拖延怪！";
+                }
+                document.getElementById('result-rank-comment').innerText = comment;
+
+                app.showTab('result');
+            }
+        }
+
+        const app = new Application();
+        const game = new GameEngine();
+    </script>
+</body>
+</html>
